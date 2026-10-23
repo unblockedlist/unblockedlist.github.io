@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#000000">
+  <title>Links</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #000;
+      --text: #ededed;
+      --link: #69b7ff;
+      --muted: #999;
+      --line: #252525;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 15px/1.55 Arial, Helvetica, sans-serif;
+    }
+    .page { width: min(760px, calc(100% - 32px)); margin: 0 auto; padding: 38px 0 48px; }
+    header { margin-bottom: 24px; }
+    h1 { margin: 0 0 7px; font-size: 23px; font-weight: 600; letter-spacing: -.4px; }
+    .subtitle { margin: 0; color: var(--muted); font-size: 13px; }
+    .search { margin: 20px 0 16px; }
+    input {
+      display: block; width: 100%; padding: 11px 12px; border: 1px solid #333;
+      border-radius: 5px; background: #0a0a0a; color: var(--text); font: inherit;
+      outline: none;
+    }
+    input:focus { border-color: #777; }
+    .links { border-top: 1px solid var(--line); }
+    .link {
+      display: block; padding: 9px 2px; border-bottom: 1px solid var(--line);
+      color: var(--link); text-decoration: underline; text-underline-offset: 2px;
+      overflow-wrap: anywhere;
+    }
+    .link:hover { color: #b4dcff; }
+    .link.hidden { display: none; }
+    .empty { display: none; padding: 18px 2px; color: var(--muted); }
+    footer { padding-top: 18px; color: #777; font-size: 12px; }
+    .link { cursor: pointer; }
+    .help-panel {
+      display: none; margin: 0 0 20px; padding: 16px; border: 1px solid #333;
+      border-radius: 6px; background: #0b0b0b;
+    }
+    .help-panel.open { display: block; }
+    .help-panel h2 { margin: 0 0 8px; font-size: 17px; font-weight: 600; }
+    .help-panel p { margin: 0 0 14px; color: #ddd; }
+    .panel-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+    .open-site { color: var(--link); }
+    .close-panel { color: var(--muted); background: transparent; border: 0; padding: 0; font: inherit; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <h1>Links</h1>
+      <p class="subtitle">All links in one place.</p>
+      <div class="search">
+        <input id="search" type="search" placeholder="Search links…" aria-label="Search links">
+      </div>
+    </header>
+    <section class="help-panel" id="help-panel" aria-live="polite">
+      <h2 id="help-title">Link instructions</h2>
+      <p id="help-text"></p>
+      <div class="panel-actions">
+        <a class="open-site" id="open-site" href="#" target="_blank" rel="noopener noreferrer">Open website ↗</a>
+        <button class="close-panel" id="close-panel" type="button">Close</button>
+      </div>
+    </section>
+    <nav class="links" aria-label="Website links">
+      <a class="link" href="https://classroom97.github.io/" target="_blank" rel="noopener noreferrer">Classroom97.github.io</a>
+      <a class="link" href="https://74.83.43.235:80/" target="_blank" rel="noopener noreferrer">https://74.83.43.235:80/</a>
+      <a class="link" href="https://freezenovagames.github.io/" target="_blank" rel="noopener noreferrer">https://freezenovagames.github.io/</a>
+      <a class="link" href="https://propertydealersinsindia.org/" target="_blank" rel="noopener noreferrer">https://propertydealersinsindia.org/</a>
+      <a class="link" href="https://playgeckogames.github.io/" target="_blank" rel="noopener noreferrer">https://playgeckogames.github.io/</a>
+      <a class="link" href="https://raidcade.games/" target="_blank" rel="noopener noreferrer">https://raidcade.games/</a>
+      <a class="link" href="https://lgbtqresources.b-cdn.net/" target="_blank" rel="noopener noreferrer">https://lgbtqresources.b-cdn.net/</a>
+      <a class="link" href="https://polar-s-shack.pages.dev/" target="_blank" rel="noopener noreferrer">https://polar-s-shack.pages.dev/</a>
+      <a class="link" href="https://hisd.b-cdn.net/" target="_blank" rel="noopener noreferrer">https://hisd.b-cdn.net/</a>
+      <a class="link" href="https://pizzaedition.win/" target="_blank" rel="noopener noreferrer">Pizzaedition.win</a>
+      <a class="link" href="https://unblocked-frog.github.io/" target="_blank" rel="noopener noreferrer">unblocked-frog.github.io</a>
+      <a class="link" href="https://study4class.com/" data-instructions='Type “6767” into the calculator, then press the clear button.'>study4class.com</a>
+      <a class="link" href="https://sammycheez.com/" target="_blank" rel="noopener noreferrer">sammycheez.com</a>
+      <a class="link" href="https://sites.google.com/view/classroom6x/" target="_blank" rel="noopener noreferrer">https://sites.google.com/view/classroom6x/</a>
+      <a class="link" href="https://www.hypackel.com/" target="_blank" rel="noopener noreferrer">https://www.hypackel.com/</a>
+      <a class="link" href="https://d3rt2zzszi7qdr.cloudfront.net/" target="_blank" rel="noopener noreferrer">https://d3rt2zzszi7qdr.cloudfront.net/</a>
+      <a class="link" href="https://hypackellite.github.io/" target="_blank" rel="noopener noreferrer">https://hypackellite.github.io/</a>
+      <a class="link" href="https://quackprep.org/" target="_blank" rel="noopener noreferrer">https://quackprep.org/</a>
+      <a class="link" href="https://s3.amazonaws.com/googleclass/index.html" target="_blank" rel="noopener noreferrer">https://s3.amazonaws.com/googleclass/index.html</a>
+      <a class="link" href="https://calcsolver.com/" data-instructions='Open Advanced Calculator and type “0000”.'>calcsolver.com</a>
+      <a class="link" href="https://obsidiang.com/" target="_blank" rel="noopener noreferrer">obsidiang.com</a>
+      <a class="link" href="https://gas.education/" target="_blank" rel="noopener noreferrer">Gas.education</a>
+      <a class="link" href="https://orb.games/" target="_blank" rel="noopener noreferrer">Orb.games</a>
+      <a class="link" href="https://chips.moktanram.com.np/" target="_blank" rel="noopener noreferrer">chips.moktanram.com.np</a>
+      <a class="link" href="https://future.moktanram.com.np/" target="_blank" rel="noopener noreferrer">future.moktanram.com.np</a>
+      <a class="link" href="https://spendit.moktanram.com.np/" target="_blank" rel="noopener noreferrer">spendit.moktanram.com.np</a>
+      <a class="link" href="https://threat.moktanram.com.np/" target="_blank" rel="noopener noreferrer">threat.moktanram.com.np</a>
+      <a class="link" href="https://translate.google.com/" data-instructions="Paste the URL into the website/language field on Google Translate, then open the translated link it provides. Availability depends on the website and network.">Google Translate</a>
+    </nav>
+    <p class="empty" id="empty">No matching links.</p>
+    <footer>Links open in a new tab.</footer>
+  </main>
+  <script>
+    const search = document.getElementById('search');
+    const links = [...document.querySelectorAll('.link')];
+    const empty = document.getElementById('empty');
+    const panel = document.getElementById('help-panel');
+    const title = document.getElementById('help-title');
+    const text = document.getElementById('help-text');
+    const openSite = document.getElementById('open-site');
+    const closePanel = document.getElementById('close-panel');
+
+    links.forEach(link => {
+      link.addEventListener('click', event => {
+        event.preventDefault();
+        title.textContent = link.textContent.trim();
+        text.textContent = link.dataset.instructions || 'No special instructions were included for this link. You can open the website using the link below.';
+        openSite.href = link.href;
+        panel.classList.add('open');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+
+    closePanel.addEventListener('click', () => panel.classList.remove('open'));
+
+    search.addEventListener('input', () => {
+      const query = search.value.trim().toLowerCase();
+      let shown = 0;
+      for (const link of links) {
+        const match = link.textContent.toLowerCase().includes(query) || link.href.toLowerCase().includes(query);
+        link.classList.toggle('hidden', !match);
+        if (match) shown++;
+      }
+      empty.style.display = shown ? 'none' : 'block';
+    });
+  </script>
+</body>
+</html>
