@@ -71,7 +71,7 @@
     .status::before { content:""; width:6px; height:6px; border-radius:50%; background:currentColor; }
     .status.working { color:var(--green); }
     .status.broken { color:var(--red); }
-    .status.untested { color:var(--yellow); }
+    .status.Working { color:var(--yellow); }
     .star { flex-shrink:0; border:0; padding:3px; background:transparent; color:#626779; font-size:20px; cursor:pointer; line-height:1; }
     .star.favourited { color:#f5c85b; }
     .star:focus-visible, button:focus-visible, a:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
@@ -113,7 +113,7 @@
       <div class="filters" aria-label="Website filters">
         <button class="filter-button active" data-filter="all" type="button">All websites</button>
         <button class="filter-button" data-filter="favourites" type="button">★ Favourites</button>
-        <button class="filter-button" data-filter="untested" type="button">Untested</button>
+        <button class="filter-button" data-filter="Working" type="button">Working</button>
         <button class="filter-button" data-filter="working" type="button">Working</button>
         <button class="filter-button" data-filter="broken" type="button">Broken</button>
       </div>
@@ -205,8 +205,8 @@
         localStorage.setItem('linkhub-statuses', JSON.stringify(statuses));
       } catch { /* Storage may be unavailable in private browsing. */ }
     }
-    function statusOf(link) { return statuses[link.href] || 'untested'; }
-    function statusLabel(status) { return status === 'working' ? 'Working' : status === 'broken' ? 'Broken' : 'Untested'; }
+    function statusOf(link) { return statuses[link.href] || 'Working'; }
+    function statusLabel(status) { return status === 'working' ? 'Working' : status === 'broken' ? 'Broken' : 'Working'; }
 
     links.forEach((link, index) => {
       const name = link.textContent.trim();
@@ -278,7 +278,7 @@
         const matchesQuery = link.dataset.name.toLowerCase().includes(query) || link.dataset.originalUrl.toLowerCase().includes(query);
         const matchesFilter = activeFilter === 'all' ||
           (activeFilter === 'favourites' && favourites.includes(link.dataset.originalUrl)) ||
-          (['untested','working','broken'].includes(activeFilter) && statusOf(link) === activeFilter);
+          (['Working','working','broken'].includes(activeFilter) && statusOf(link) === activeFilter);
         const show = matchesQuery && matchesFilter;
         link.classList.toggle('hidden', !show);
         if (show) shown++;
