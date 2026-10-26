@@ -3,80 +3,151 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#000000">
-  <title>Links</title>
+  <meta name="theme-color" content="#08090d">
+  <title>Link Hub</title>
   <style>
     :root {
       color-scheme: dark;
-      --bg: #000;
-      --text: #ededed;
-      --link: #69b7ff;
-      --muted: #999;
-      --line: #252525;
+      --bg: #08090d;
+      --panel: #101219;
+      --panel-2: #151822;
+      --text: #f4f5f7;
+      --muted: #969baa;
+      --line: #262a36;
+      --accent: #9b8cff;
+      --accent-soft: rgba(155,140,255,.12);
+      --green: #70d6a3;
+      --red: #ff8d98;
+      --yellow: #f2c66d;
     }
     * { box-sizing: border-box; }
     body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font: 15px/1.55 Arial, Helvetica, sans-serif;
+      margin: 0; min-height: 100vh;
+      background: radial-gradient(ellipse at top, #17152a 0, var(--bg) 48%);
+      color: var(--text); font: 15px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    .page { width: min(760px, calc(100% - 32px)); margin: 0 auto; padding: 38px 0 48px; }
-    header { margin-bottom: 24px; }
-    h1 { margin: 0 0 7px; font-size: 23px; font-weight: 600; letter-spacing: -.4px; }
-    .subtitle { margin: 0; color: var(--muted); font-size: 13px; }
-    .search { margin: 20px 0 16px; }
-    input {
-      display: block; width: 100%; padding: 11px 12px; border: 1px solid #333;
-      border-radius: 5px; background: #0a0a0a; color: var(--text); font: inherit;
-      outline: none;
+    button, input, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    .page { width: min(860px, calc(100% - 32px)); margin: 0 auto; padding: 44px 0 32px; }
+    .topline { display:flex; align-items:center; gap:10px; margin-bottom:18px; color:var(--muted); font-size:12px; letter-spacing:.12em; text-transform:uppercase; }
+    .dot { width:8px; height:8px; border-radius:50%; background:var(--green); box-shadow:0 0 14px rgba(112,214,163,.6); }
+    header { margin-bottom: 22px; }
+    h1 { margin:0; font-size:clamp(30px, 6vw, 44px); line-height:1.08; letter-spacing:-1.5px; font-weight:800; }
+    .gradient { color:var(--accent); }
+    .subtitle { margin:11px 0 0; color:var(--muted); max-width:580px; }
+    .toolbar { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; margin:24px 0 14px; }
+    .search-wrap { position:relative; }
+    .search-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
+    input, textarea {
+      width:100%; padding:12px 14px; border:1px solid var(--line); border-radius:12px;
+      background:rgba(16,18,25,.9); color:var(--text); outline:none; transition:border-color .18s, box-shadow .18s;
     }
-    input:focus { border-color: #777; }
-    .links { border-top: 1px solid var(--line); }
+    #search { padding-left:40px; }
+    input:focus, textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+    .button, .filter-button, .small-button {
+      border:1px solid var(--line); border-radius:11px; padding:10px 13px;
+      background:var(--panel); color:var(--text); cursor:pointer; transition:transform .15s, background .15s, border-color .15s;
+    }
+    .button:hover, .filter-button:hover, .small-button:hover { background:var(--panel-2); border-color:#48415f; }
+    .button:active, .filter-button:active, .small-button:active { transform:scale(.98); }
+    .button.primary { background:var(--accent); border-color:var(--accent); color:#100d20; font-weight:700; }
+    .button.primary:hover { background:#b1a7ff; }
+    .filters { display:flex; flex-wrap:wrap; gap:8px; margin:0 0 14px; }
+    .filter-button { padding:7px 11px; color:var(--muted); font-size:13px; }
+    .filter-button.active { color:var(--text); border-color:var(--accent); background:var(--accent-soft); }
+    .summary { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:12px 2px; color:var(--muted); font-size:12px; }
+    .links { display:grid; gap:8px; }
     .link {
-      display: block; padding: 9px 2px; border-bottom: 1px solid var(--line);
-      color: var(--link); text-decoration: underline; text-underline-offset: 2px;
-      overflow-wrap: anywhere;
+      display:flex; align-items:center; gap:12px; min-width:0; padding:13px 14px;
+      border:1px solid var(--line); border-radius:13px; background:rgba(16,18,25,.88);
+      color:var(--text); text-decoration:none; overflow-wrap:anywhere;
+      transition:transform .16s, border-color .16s, background .16s;
     }
-    .link:hover { color: #b4dcff; }
-    .link.hidden { display: none; }
-    .empty { display: none; padding: 18px 2px; color: var(--muted); }
-    footer { padding-top: 18px; color: #777; font-size: 12px; }
-    .link { cursor: pointer; }
-    .help-panel {
-      display: none; margin: 0 0 20px; padding: 16px; border: 1px solid #333;
-      border-radius: 6px; background: #0b0b0b;
+    .link:hover { transform:translateY(-1px); border-color:#51476e; background:#141622; }
+    .link.hidden { display:none; }
+    .link-name { min-width:0; flex:1; }
+    .link-url { display:block; margin-top:2px; color:var(--muted); font-size:11px; overflow-wrap:anywhere; }
+    .status { flex-shrink:0; display:inline-flex; align-items:center; gap:6px; color:var(--yellow); font-size:11px; white-space:nowrap; }
+    .status::before { content:""; width:6px; height:6px; border-radius:50%; background:currentColor; }
+    .status.working { color:var(--green); }
+    .status.broken { color:var(--red); }
+    .status.untested { color:var(--yellow); }
+    .star { flex-shrink:0; border:0; padding:3px; background:transparent; color:#626779; font-size:20px; cursor:pointer; line-height:1; }
+    .star.favourited { color:#f5c85b; }
+    .star:focus-visible, button:focus-visible, a:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+    .empty { display:none; padding:26px 16px; text-align:center; color:var(--muted); border:1px dashed var(--line); border-radius:13px; }
+    .help-panel, .suggest-panel { display:none; margin:0 0 16px; padding:18px; border:1px solid #3b3455; border-radius:15px; background:linear-gradient(145deg,#171522,#101219); }
+    .help-panel.open, .suggest-panel.open { display:block; }
+    .panel-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+    .help-panel h2, .suggest-panel h2 { margin:0 0 7px; font-size:18px; letter-spacing:-.3px; }
+    .help-panel p, .suggest-panel p { margin:0 0 14px; color:#c4c6d0; }
+    .panel-actions { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+    .open-site { color:#c1b8ff; font-weight:650; text-decoration:none; }
+    .open-site:hover { text-decoration:underline; }
+    .close-panel { border:0; background:transparent; color:var(--muted); cursor:pointer; padding:2px 0; }
+    .report-button { border-color:#62353d; color:#ffb2ba; }
+    .form-grid { display:grid; gap:10px; margin:12px 0; }
+    textarea { resize:vertical; min-height:85px; }
+    .form-note { font-size:12px; color:var(--muted); }
+    footer { display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; margin-top:24px; padding-top:18px; border-top:1px solid var(--line); color:#777d8d; font-size:12px; }
+    footer button { border:0; background:transparent; color:#aaa0ff; padding:0; cursor:pointer; }
+    @media (max-width:560px) {
+      .page { padding-top:28px; }
+      .toolbar { grid-template-columns:1fr; }
+      .link { gap:8px; padding:12px 10px; }
+      .status { font-size:10px; }
+      .link-url { max-width:42vw; }
     }
-    .help-panel.open { display: block; }
-    .help-panel h2 { margin: 0 0 8px; font-size: 17px; font-weight: 600; }
-    .help-panel p { margin: 0 0 14px; color: #ddd; }
-    .panel-actions { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
-    .open-site { color: var(--link); }
-    .close-panel { color: var(--muted); background: transparent; border: 0; padding: 0; font: inherit; cursor: pointer; }
   </style>
 </head>
 <body>
   <main class="page">
+    <div class="topline"><span class="dot"></span> Personal link collection</div>
     <header>
-      <h1>Links</h1>
-      <p class="subtitle">All links in one place.</p>
-      <div class="search">
-        <input id="search" type="search" placeholder="Search links…" aria-label="Search links">
+      <h1>Link <span class="gradient">Hub.</span></h1>
+      <p class="subtitle">Your saved websites in one simple place. Search, favourite, and keep track of links that work for you.</p>
+      <div class="toolbar">
+        <div class="search-wrap"><span class="search-icon">⌕</span><input id="search" type="search" placeholder="Search websites…" aria-label="Search websites"></div>
+        <button class="button primary" id="suggest-open" type="button">+ Suggest a site</button>
+      </div>
+      <div class="filters" aria-label="Website filters">
+        <button class="filter-button active" data-filter="all" type="button">All websites</button>
+        <button class="filter-button" data-filter="favourites" type="button">★ Favourites</button>
+        <button class="filter-button" data-filter="untested" type="button">Untested</button>
+        <button class="filter-button" data-filter="working" type="button">Working</button>
+        <button class="filter-button" data-filter="broken" type="button">Broken</button>
       </div>
     </header>
+
     <section class="help-panel" id="help-panel" aria-live="polite">
-      <h2 id="help-title">Link instructions</h2>
-      <p id="help-text"></p>
+      <div class="panel-top"><div><h2 id="help-title">Website details</h2><p id="help-text"></p></div><button class="close-panel" id="close-panel" type="button">Close</button></div>
       <div class="panel-actions">
         <a class="open-site" id="open-site" href="#" target="_blank" rel="noopener noreferrer">Open website ↗</a>
-        <button class="close-panel" id="close-panel" type="button">Close</button>
+        <button class="small-button" id="mark-working" type="button">Mark working</button>
+        <button class="small-button" id="mark-broken" type="button">Mark broken</button>
+        <a class="button report-button" id="report-broken" href="mailto:lcurwood6@gmail.com">Report broken website</a>
       </div>
+      <p class="form-note" style="margin-top:12px">Statuses are user-reported, not automatic live checks. Your changes are saved in this browser.</p>
     </section>
-    <nav class="links" aria-label="Website links">
+
+    <section class="suggest-panel" id="suggest-panel">
+      <div class="panel-top"><div><h2>Suggest a website</h2><p>Send a website suggestion for the list.</p></div><button class="close-panel" id="suggest-close" type="button">Close</button></div>
+      <form id="suggest-form">
+        <div class="form-grid">
+          <input id="suggest-name" type="text" placeholder="Website name" required maxlength="100">
+          <input id="suggest-url" type="url" placeholder="https://example.com" required>
+          <textarea id="suggest-reason" placeholder="What is it, and why should it be added? (optional)" maxlength="500"></textarea>
+        </div>
+        <button class="button primary" type="submit">Prepare email suggestion</button>
+        <p class="form-note" style="margin-top:10px">This opens your email app with a pre-filled message. You still need to press Send.</p>
+      </form>
+    </section>
+
+<nav class="links" aria-label="Website links">
       <a class="link" href="https://classroom97.github.io/" target="_blank" rel="noopener noreferrer">Classroom97.github.io</a>
       <a class="link" href="https://74.83.43.235:80/" target="_blank" rel="noopener noreferrer">https://74.83.43.235:80/</a>
       <a class="link" href="https://freezenovagames.github.io/" target="_blank" rel="noopener noreferrer">https://freezenovagames.github.io/</a>
-      <a class="link" href="https://propertydealersinindia.org/" target="_blank" rel="noopener noreferrer">https://propertydealersinindia.org/</a>
+      <a class="link" href="https://propertydealersinsindia.org/" target="_blank" rel="noopener noreferrer">https://propertydealersinsindia.org/</a>
       <a class="link" href="https://playgeckogames.github.io/" target="_blank" rel="noopener noreferrer">https://playgeckogames.github.io/</a>
       <a class="link" href="https://raidcade.games/" target="_blank" rel="noopener noreferrer">https://raidcade.games/</a>
       <a class="link" href="https://lgbtqresources.b-cdn.net/" target="_blank" rel="noopener noreferrer">https://lgbtqresources.b-cdn.net/</a>
@@ -102,8 +173,11 @@
       <a class="link" href="https://threat.moktanram.com.np/" target="_blank" rel="noopener noreferrer">threat.moktanram.com.np</a>
       <a class="link" href="https://translate.google.com/" data-instructions="Paste the URL into the website/language field on Google Translate, then open the translated link it provides. Availability depends on the website and network.">Google Translate</a>
     </nav>
-    <p class="empty" id="empty">No matching links.</p>
-    <footer>Links open in a new tab.</footer>
+    <p class="empty" id="empty">No websites match this filter.</p>
+    <footer>
+      <span><span id="visible-count">0</span> websites shown · Favourites and statuses save on this device</span>
+      <span><button id="reset-data" type="button">Reset saved favourites/statuses</button></span>
+    </footer>
   </main>
   <script>
     const search = document.getElementById('search');
@@ -111,33 +185,149 @@
     const empty = document.getElementById('empty');
     const panel = document.getElementById('help-panel');
     const title = document.getElementById('help-title');
-    const text = document.getElementById('help-text');
+    const helpText = document.getElementById('help-text');
     const openSite = document.getElementById('open-site');
-    const closePanel = document.getElementById('close-panel');
+    const reportBroken = document.getElementById('report-broken');
+    const visibleCount = document.getElementById('visible-count');
+    const suggestPanel = document.getElementById('suggest-panel');
+    let activeFilter = 'all';
+    let selectedLink = null;
+    let favourites = readStore('linkhub-favourites', []);
+    let statuses = readStore('linkhub-statuses', {});
 
-    links.forEach(link => {
+    function readStore(key, fallback) {
+      try { const value = localStorage.getItem(key); return value ? JSON.parse(value) : fallback; }
+      catch { return fallback; }
+    }
+    function saveStore() {
+      try {
+        localStorage.setItem('linkhub-favourites', JSON.stringify(favourites));
+        localStorage.setItem('linkhub-statuses', JSON.stringify(statuses));
+      } catch { /* Storage may be unavailable in private browsing. */ }
+    }
+    function statusOf(link) { return statuses[link.href] || 'untested'; }
+    function statusLabel(status) { return status === 'working' ? 'Working' : status === 'broken' ? 'Broken' : 'Untested'; }
+
+    links.forEach((link, index) => {
+      const name = link.textContent.trim();
+      const url = link.href;
+      link.dataset.name = name;
+      link.dataset.originalUrl = url;
+
+      // Decorate the existing links with a clear name, URL, status and favourite toggle.
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'link-name';
+      nameSpan.innerHTML = '';
+      const nameText = document.createElement('span');
+      nameText.textContent = name;
+      const urlText = document.createElement('span');
+      urlText.className = 'link-url';
+      urlText.textContent = url;
+      nameSpan.append(nameText, urlText);
+
+      const status = document.createElement('span');
+      status.className = 'status';
+      status.setAttribute('aria-label', 'Website status');
+      const star = document.createElement('button');
+      star.type = 'button';
+      star.className = 'star';
+      star.setAttribute('aria-label', 'Toggle favourite');
+      star.title = 'Toggle favourite';
+      star.textContent = '★';
+      star.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        if (favourites.includes(url)) favourites = favourites.filter(item => item !== url);
+        else favourites.push(url);
+        saveStore(); decorate(link); render();
+      });
+      link.replaceChildren(nameSpan, status, star);
       link.addEventListener('click', event => {
         event.preventDefault();
-        title.textContent = link.textContent.trim();
-        text.textContent = link.dataset.instructions || 'No special instructions were included for this link. You can open the website using the link below.';
-        openSite.href = link.href;
+        selectedLink = link;
+        title.textContent = name;
+        helpText.textContent = link.dataset.instructions || 'No special instructions were provided. Open the website using the link below.';
+        openSite.href = url;
+        const subject = encodeURIComponent('Broken website report: ' + name);
+        const body = encodeURIComponent('Hi,\n\nI found a broken website on the Link Hub.\n\nWebsite: ' + name + '\nURL: ' + url + '\n\nWhat happened: ');
+        reportBroken.href = 'mailto:lcurwood6@gmail.com?subject=' + subject + '&body=' + body;
         panel.classList.add('open');
+        suggestPanel.classList.remove('open');
         panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       });
+      decorate(link);
     });
 
-    closePanel.addEventListener('click', () => panel.classList.remove('open'));
+    function decorate(link) {
+      const status = link.querySelector('.status');
+      const star = link.querySelector('.star');
+      const value = statusOf(link);
+      status.className = 'status ' + value;
+      status.textContent = statusLabel(value);
+      const isFav = favourites.includes(link.dataset.originalUrl);
+      star.classList.toggle('favourited', isFav);
+      star.setAttribute('aria-pressed', String(isFav));
+      star.setAttribute('aria-label', isFav ? 'Remove from favourites' : 'Add to favourites');
+      star.title = isFav ? 'Remove from favourites' : 'Add to favourites';
+    }
 
-    search.addEventListener('input', () => {
+    function render() {
       const query = search.value.trim().toLowerCase();
       let shown = 0;
-      for (const link of links) {
-        const match = link.textContent.toLowerCase().includes(query) || link.href.toLowerCase().includes(query);
-        link.classList.toggle('hidden', !match);
-        if (match) shown++;
-      }
+      links.forEach(link => {
+        const matchesQuery = link.dataset.name.toLowerCase().includes(query) || link.dataset.originalUrl.toLowerCase().includes(query);
+        const matchesFilter = activeFilter === 'all' ||
+          (activeFilter === 'favourites' && favourites.includes(link.dataset.originalUrl)) ||
+          (['untested','working','broken'].includes(activeFilter) && statusOf(link) === activeFilter);
+        const show = matchesQuery && matchesFilter;
+        link.classList.toggle('hidden', !show);
+        if (show) shown++;
+      });
       empty.style.display = shown ? 'none' : 'block';
+      visibleCount.textContent = shown;
+    }
+
+    search.addEventListener('input', render);
+    document.querySelectorAll('[data-filter]').forEach(button => {
+      button.addEventListener('click', () => {
+        activeFilter = button.dataset.filter;
+        document.querySelectorAll('[data-filter]').forEach(item => item.classList.toggle('active', item === button));
+        render();
+      });
     });
+    document.getElementById('close-panel').addEventListener('click', () => panel.classList.remove('open'));
+    document.getElementById('suggest-open').addEventListener('click', () => {
+      suggestPanel.classList.toggle('open');
+      panel.classList.remove('open');
+      if (suggestPanel.classList.contains('open')) suggestPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    });
+    document.getElementById('suggest-close').addEventListener('click', () => suggestPanel.classList.remove('open'));
+    document.getElementById('mark-working').addEventListener('click', () => updateSelectedStatus('working'));
+    document.getElementById('mark-broken').addEventListener('click', () => updateSelectedStatus('broken'));
+
+    function updateSelectedStatus(value) {
+      if (!selectedLink) return;
+      statuses[selectedLink.dataset.originalUrl] = value;
+      saveStore(); decorate(selectedLink); render();
+    }
+
+    document.getElementById('suggest-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const name = document.getElementById('suggest-name').value.trim();
+      const url = document.getElementById('suggest-url').value.trim();
+      const reason = document.getElementById('suggest-reason').value.trim() || 'No reason supplied.';
+      const subject = encodeURIComponent('Website suggestion: ' + name);
+      const body = encodeURIComponent('Hi,\n\nI would like to suggest this website for the Link Hub.\n\nName: ' + name + '\nURL: ' + url + '\nWhy add it: ' + reason);
+      window.location.href = 'mailto:lcurwood6@gmail.com?subject=' + subject + '&body=' + body;
+    });
+
+    document.getElementById('reset-data').addEventListener('click', () => {
+      if (!confirm('Reset all saved favourites and website statuses on this device?')) return;
+      favourites = []; statuses = {}; saveStore();
+      links.forEach(decorate); render();
+    });
+
+    render();
   </script>
 </body>
 </html>
